@@ -30,15 +30,16 @@
           loading: false,
         },
         mounted() {
-          window.handleEvent = this.handleEvent
+          window.handleEvent = this.handleEvent;
+          this.startCastReciever();
           NProgress.start();
           setTimeout(() => {
             this.$refs['intro-logo'].style.opacity = 1;
-          }, 300)
+          }, 300);
         },
         methods: {
           handleEvent(event) {
-            const type = event.type
+            const type = event.type;
             if (type === 'reload') {
               window.location.reload(true);
             } else if (type === 'loadData') {
@@ -46,11 +47,11 @@
             }
           },
           startCastReciever() {
-            const context = cast.framework.CastReceiverContext.getInstance()
+            const context = window.cast.framework.CastReceiverContext.getInstance();
             context.addCustomMessageListener('urn:x-cast:hen.cast', (customEvent) => {
-              this.handleEvent(customEvent.data)
+              this.handleEvent(customEvent.data);
             });
-            context.start()
+            context.start();
           },
         },
       })
