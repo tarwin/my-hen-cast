@@ -1,60 +1,48 @@
-<!DOCTYPE html>
-<html>
+
+<html manifest="cache.manifest">
   <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>H=N Collection Caster</title>
-    <meta name="description" content="H=N Collection Caster">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
-    <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">    
-    <script type="text/javascript" src="//www.gstatic.com/cast/sdk/libs/caf_receiver/v3/cast_receiver_framework.js"></script>
-    <link rel="stylesheet" href="./style.css">
-
-    <link href="nprogress.css" rel="stylesheet">    
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+    <script type="text/javascript"
+        src="//www.gstatic.com/cast/sdk/libs/caf_receiver/v3/cast_receiver_framework.js">
+    </script>
+    <!-- <script src="speakClient.js"></script> -->
+    <style>
+      html, body {
+        background: #000;
+        color: #fff;
+        text-shadow: 3px 3px 3px #000;
+        width: 100%;
+        height: 100%;
+        padding: 0;
+        margin: 0;
+      }
+    body {
+      /* background: url('https://images.unsplash.com/photo-1552933529-e359b2477252?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9') 50% 50% no-repeat; */
+      background: url('') 50% 50% no-repeat;
+      background-size: cover;
+    }
+    </style>
   </head>
-  <body>
-    <div id="app">
-      <div id="intro">
-        <div id="intro-logo" ref="intro-logo"></div>
-      </div>
-    </div>
+  <body id="body">
+    <h1>Welcome back Ramune ...</h1>
+    <h2 id="message"></h2>
+    <!-- <div id="audio"></div> -->
     <script>
-
-      var app = new Vue({
-        el: '#app',
-        data: {
-          loading: false,
-        },
-        mounted() {
-          window.handleEvent = this.handleEvent;
-          this.startCastReciever();
-          NProgress.start();
-          setTimeout(() => {
-            this.$refs['intro-logo'].style.opacity = 1;
-          }, 300);
-        },
-        methods: {
-          handleEvent(event) {
-            const type = event.type;
-            if (type === 'reload') {
-              window.location.reload(true);
-            } else if (type === 'loadData') {
-              //
-            }
-          },
-          startCastReciever() {
-            const context = window.cast.framework.CastReceiverContext.getInstance();
-            context.addCustomMessageListener('urn:x-cast:hen.cast', (customEvent) => {
-              this.handleEvent(customEvent.data);
-            });
-            context.start();
-          },
-        },
-      })
+      // speak('Welcome back Ramune');
+  
+      // cast.receiver.logger.setLevelValue(cast.receiver.LoggerLevel.DEBUG);
+      const context = cast.framework.CastReceiverContext.getInstance();
+      context.addCustomMessageListener('urn:x-cast:gallery.specter', function (customEvent) {
+        var data = customEvent.data
+        var type = data.type
+        if (type === 'text') {
+          document.getElementById("message").innerHTML = data.text;
+  
+          // speak.data.text;
+        } else if (type === 'image') {
+          document.getElementById("body").style.backgroundImage = `url('${data.url}')`;
+        }
+      });
+      context.start();
     </script>
   </body>
-</html>
+  </html>
